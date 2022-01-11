@@ -39,9 +39,9 @@ public:
 			}
 			tmp->next = new Node<T>;
 			tmp->next->value = value;
-			tmp->next->prev = tmp->next;
+			tmp->next->prev = tmp;
 			tmp->next->next = nullptr;
-			this->end = tmp;
+			//this->end = tmp;
 		}
 		this->size++;
 	}
@@ -52,7 +52,6 @@ public:
 		{
 			cout << "Prev: " << tmp->prev << "\tValue: " << tmp->value<<"\tAdres: "<<tmp << "\tNext: " << tmp->next << "\n";
 			tmp = tmp->next;
-			//break;
 		}
 		delete tmp;
 	}
@@ -65,9 +64,12 @@ public:
 			if (tmp->value == value)
 			{
 				f = 1;
+				break;
 			}
 			tmp = tmp->next;
 		}
+		delete tmp;
+
 		if (f == 1)
 		{
 			return true;
@@ -76,7 +78,6 @@ public:
 		{
 			return false;
 		}
-		delete tmp;
 	}
 	void removeByValue(T value)
 	{
@@ -89,19 +90,26 @@ public:
 		}
 		else
 		{
-			while (tmp != nullptr)
+			Node<T>* iter = this->head;
+			while (iter->next != nullptr)
 			{
-				if (tmp->value == value)
+				if (iter->value == value)
 				{
 					//tmp->value = tmp->next->value;
-					tmp->next = tmp->next->prev;
-					tmp->prev = tmp->prev->next;
+				/*	iter->next->prev = iter->prev;
+					iter->next->value = iter->value;
+					iter->prev->next = iter->next;*/
+
+					iter->next = iter->next->next;
+					iter->next->next->prev = iter;
+					break;
 				}
-				tmp = tmp->next;
+				iter = iter->next;
+
 			}
-			tmp->next = tmp->next->next;
+			tmp = iter->next;
 		}
-		delete tmp;
+		//delete tmp;
 		size--;
 	}
 };
@@ -111,8 +119,10 @@ int main()
 	list.Add(1);
 	list.Add(2);
 	list.Add(3);
+	list.Add(4);
+	list.Add(5);
 	list.print();
-	cout<<list.isList(1);
+	cout<<list.isList(5);
 	list.removeByValue(2);
 	cout << "\n\n\n";
 	list.print();
