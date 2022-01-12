@@ -68,7 +68,7 @@ public:
 			}
 			tmp = tmp->next;
 		}
-		delete tmp;
+		//delete tmp;
 
 		if (f == 1)
 		{
@@ -84,7 +84,7 @@ public:
 		Node<T>* tmp = this->head;
 		if (tmp->value == value)
 		{	
-			tmp->next = tmp->next->prev;
+			tmp->next = tmp->next->next->prev;
 			tmp->next->prev = nullptr;
 			this->head = tmp->next;
 		}
@@ -95,17 +95,15 @@ public:
 			{
 				if (iter->value == value)
 				{
-					//tmp->value = tmp->next->value;
-				/*	iter->next->prev = iter->prev;
-					iter->next->value = iter->value;
-					iter->prev->next = iter->next;*/
-
-					iter->next = iter->next->next;
-					iter->next->next->prev = iter;
+						iter->prev->next = iter->next;
+						iter->next->prev = iter->prev;
 					break;
 				}
 				iter = iter->next;
-
+				if (iter->next == nullptr)
+				{
+					iter->prev->next = iter->next;
+				}
 			}
 			tmp = iter->next;
 		}
@@ -122,7 +120,7 @@ int main()
 	list.Add(4);
 	list.Add(5);
 	list.print();
-	cout<<list.isList(5);
+	//cout<<list.isList(5);
 	list.removeByValue(2);
 	cout << "\n\n\n";
 	list.print();
