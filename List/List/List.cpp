@@ -41,7 +41,6 @@ public:
 			tmp->next->value = value;
 			tmp->next->prev = tmp;
 			tmp->next->next = nullptr;
-			//this->end = tmp;
 		}
 		this->size++;
 	}
@@ -69,7 +68,6 @@ public:
 			tmp = tmp->next;
 		}
 		//delete tmp;
-
 		if (f == 1)
 		{
 			return true;
@@ -84,9 +82,15 @@ public:
 		Node<T>* tmp = this->head;
 		if (tmp->value == value)
 		{	
-			tmp->next = tmp->next->next->prev;
-			tmp->next->prev = nullptr;
-			this->head = tmp->next;
+			if (tmp->next != nullptr)
+			{
+				tmp->next->prev = nullptr;
+				this->head = this->head->next;
+			}
+			else
+			{
+				this->head = this->head->next;
+			}
 		}
 		else
 		{
@@ -95,8 +99,8 @@ public:
 			{
 				if (iter->value == value)
 				{
-						iter->prev->next = iter->next;
-						iter->next->prev = iter->prev;
+					iter->prev->next = iter->next;
+					iter->next->prev = iter->prev;
 					break;
 				}
 				iter = iter->next;
@@ -107,21 +111,78 @@ public:
 			}
 			tmp = iter->next;
 		}
-		//delete tmp;
+		delete tmp;
 		size--;
 	}
 };
 int main()
 {
 	List<int> list;
-	list.Add(1);
-	list.Add(2);
-	list.Add(3);
-	list.Add(4);
-	list.Add(5);
-	list.print();
-	//cout<<list.isList(5);
-	list.removeByValue(2);
-	cout << "\n\n\n";
-	list.print();
+	setlocale(0, "");
+	int vibor;
+	do
+	{
+		cout << "\t\tМеню\n";
+		cout << "1 - Добавление элемента в список\n";
+		cout << "2 - Вывод всего списка\n";
+		cout << "3 - Поиск элемента в списке\n";
+		cout << "4 - Удаление элемента из списка\n";
+		cout << "0 - Выход\n";
+		cout << "Сделайте свой выбор: ";
+		cin >> vibor;
+		switch (vibor)
+		{
+		case 1:
+			system("cls");
+			cout << "Введите элемент который хотите добавить в список: ";
+			int a;
+			cin >> a;
+			list.Add(a);
+			cout << "Вы добавили в список: "<<a<<"\n";
+			system("pause");
+			system("cls");
+			break;
+		case 2:
+			system("cls");
+			list.print();
+			system("pause");
+			system("cls");
+			break;
+		case 3:
+			system("cls");
+			int i;
+			cout << "Введите элемент который хотите найти: ";
+			cin >> i;
+			if (list.isList(i) == 1)
+			{
+				cout << "Элемент есть в списке!!!\n";
+			}
+			else
+			{
+				cout << "Элемента нет в списке!!!\n";
+			}
+			system("pause");
+			system("cls");
+			break;
+		case 4:
+			system("cls");
+			int d;
+			cout << "Введите элемент который хотите удалить: ";
+			cin >> d;
+			if (list.isList(d) == 1)
+			{
+				list.removeByValue(d);
+				cout << "Элемент удален!!!\n";
+				list.print();
+			}
+			else
+			{
+				cout << "Элемента в списке нет!!\n";
+			}
+			system("pause");
+			system("cls");
+			break;
+		}
+	} while (vibor != 0);
+
 }
